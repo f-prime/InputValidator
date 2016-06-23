@@ -60,7 +60,7 @@ class Validator:
                         print 1
                         return None
                 elif required:
-                    if type(self.form[field]) != type_:
+                    if type(self.form[field]) != type_ and self.form[field] != None:
                         print 2
                         return None
                     output[field] = self.form[field]
@@ -71,7 +71,7 @@ class Validator:
                 if field not in self.form:
                     print 3
                     return None
-                elif type(self.form[field]) != self.fields[field]:
+                elif type(self.form[field]) != self.fields[field] and self.form[field] != None:
                     print field
                     print 4
                     return None
