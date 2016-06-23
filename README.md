@@ -9,7 +9,7 @@ Docs
 
 `class Validator(formValidationDict, userInputDict)`
 
-`def validator()` -> Returns filtered userInputDict if successful, otherwise returns None
+`def validator()` -> Returns filtered userInputDict if successful, otherwise returns `None`
 
 
 Building Expected Data Dictionary
@@ -51,9 +51,16 @@ Using the above, another fields dictionary might look like the following
 
 If birthday is not passed in the use input data dictionary then no error will be raised.
 
+The field types can also be a regex pattern. For example, If I wanted to verify that a field is a valid email, I might do something like the following.
+
+    fields = {
+        "email":"[a-zA-Z0-9\.\-\_]+@[a-zA-Z]+\.[a-zA-Z]"
+    }
+
+If the `email` field does not match this pattern `None` will be returned when `.validator()` is called.
+
 Example
 =======
-
 
     import InputValidator
     import datetime
@@ -65,26 +72,28 @@ Example
         "birthday":datetime.datetime.now(),
         "gender":u"male",
         "weight":150,
+        "email":"john.smith@gmail.com",                                                                                                                                                                  
     }
 
 
     expectedDataFields = {
-        "firstname":unicode,
-        "lastname":unicode,
-        "age":{
-            "required":True,
-            "type":int,
-            "default":0,
+            "firstname":unicode,
+            "lastname":unicode,
+            "email":"[a-zA-Z0-9\.\-\_]+@[a-zA-Z]+\.[a-zA-Z]",
+            "age":{
+                "required":True,
+                "type":int,
+                "default":0,
+                },
+            "birthday":datetime.datetime,
+            "gender":{
+                "required":False,
+                "type":unicode
             },
-        "birthday":datetime.datetime,
-        "gender":{
-            "required":False,
-            "type":unicode
-        },
-        "weight":{
-            "required":False,
-            "type":int
-        }
+            "weight":{
+                "required":False,
+                "type":int
+            }
     }
 
     validator = InputValidator.Validator(expectedDataFields, userDataFields)

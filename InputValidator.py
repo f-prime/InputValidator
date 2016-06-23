@@ -1,5 +1,7 @@
+import re
+
 class Validator:
-    def __init__(self, fields, form):
+    def __init__(self, fields, form, debug=False):
         """
             fields = {
                 "firstname":unicode,
@@ -35,7 +37,8 @@ class Validator:
         """
         self.fields = fields
         self.form = form
-
+        self.debug = debug
+        
     def validate(self):
 
         """
@@ -57,24 +60,31 @@ class Validator:
                     if default:
                         output[field] = self.fields[field]['default']
                     else:
-                        print 1
+                        self.__debug(1)
                         return None
                 elif required:
                     if type(self.form[field]) != type_ and self.form[field] != None:
-                        print 2
+                        self.__debug(2)
                         return None
-                    output[field] = self.form[field]
-                elif field in self.form:
-                    output[field] = self.form[field]
 
+            elif field not in self.form: # Means there is no default and the field just does not exist
+                self.__debug(3)
+                return None
+
+            elif type(self.fields[field]) == str: # Meaning regex
+                pattern = self.fields[field]
+                if re.search(pattern, self.form[field]) == None and self.form[field] != None:
+                    self.__debug(4)
+                    return None
             else:
-                if field not in self.form:
-                    print 3
+                if type(self.form[field]) != self.fields[field] and self.form[field] != None:
+                    self.__debug(5)
                     return None
-                elif type(self.form[field]) != self.fields[field] and self.form[field] != None:
-                    print field
-                    print 4
-                    return None
-                output[field] = self.form[field]
+            
+            output[field] = self.form[field]
                 
         return output
+
+    def __debug(self, code):
+        if self.debug == True:
+            print code
