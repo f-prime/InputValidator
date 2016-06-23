@@ -34,7 +34,7 @@ If more complex logic is needed, the type can be replaced with a dictionary that
         "default":<default value set if required is True>
     }
 
-`required` and `type` are required fields while `default` is optional.
+`required` and `type` are required fields while `default` is optional, however if you use `default` on a required field and the required field is not found the `default` will be used.
 
 Using the above, another fields dictionary might look like the following
 
