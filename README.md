@@ -7,9 +7,9 @@ A small module that is used as an input validator for untrusted form data. Mainl
 Docs
 ===
 
-class Validator(formValidationDict, userInputDict)
+`class Validator(formValidationDict, userInputDict)`
 
-def validator() -> Returns filtered userInputDict is successful, otherwise returns None
+`def validator()` -> Returns filtered userInputDict if successful, otherwise returns None
 
 
 Building Expected Data Dictionary
