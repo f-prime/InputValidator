@@ -59,6 +59,27 @@ The field types can also be a regex pattern. For example, If I wanted to verify 
 
 If the `email` field does not match this pattern `None` will be returned when `.validator()` is called.
 
+
+Type fields can also contain multiple types using a list of types.
+
+    fields = {
+        "money":[int, float],
+    }
+
+
+The `money` field will have to match one of the two types `int` or `float`
+
+Int types can contain ranges as well
+
+    fields = {
+        "age":{
+            "required":True,
+            "min":18,
+            "max":110,
+            "type":int
+        }
+    }
+
 Example
 =======
 
@@ -66,23 +87,25 @@ Example
     import datetime
 
     userDataFields = {
-        "firstname":u"John",
+        "firstname":"John",
         "lastname":u"Smith",
-        "age":45,
+        "age":19,                                                                                                                                                                                        
         "birthday":datetime.datetime.now(),
         "gender":u"male",
         "weight":150,
-        "email":"john.smith@gmail.com",                                                                                                                                                                  
+        "email":"john.smith@gmail.com",
     }
 
 
     expectedDataFields = {
-            "firstname":unicode,
-            "lastname":unicode,
+            "firstname":[str, unicode],
+            "lastname":[str, unicode],
             "email":"[a-zA-Z0-9\.\-\_]+@[a-zA-Z]+\.[a-zA-Z]",
             "age":{
                 "required":True,
                 "type":int,
+                "min":18,
+                "max":120,
                 "default":0,
                 },
             "birthday":datetime.datetime,
@@ -98,4 +121,3 @@ Example
 
     validator = InputValidator.Validator(expectedDataFields, userDataFields)
     print validator.validate()
-

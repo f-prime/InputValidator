@@ -62,28 +62,61 @@ class Validator:
                     else:
                         self.__debug(1)
                         return None
+
+                elif (type_ == int or type_ == float) and self.form[field] != None:
+                    if "min" in self.fields[field]:
+                        if self.form[field] < self.fields[field]['min']:
+                            self.__debug(6)
+                            return None
+                    if "max" in self.fields[field]:
+                        if self.form[field] > self.fields[field]['max']:
+                            self.__debug(7)
+                            return None
+                
                 elif required:
-                    if type(self.form[field]) != type_ and self.form[field] != None:
-                        self.__debug(2)
+                    if not self.__typeprocess(field):
                         return None
 
             elif field not in self.form: # Means there is no default and the field just does not exist
                 self.__debug(3)
                 return None
 
-            elif type(self.fields[field]) == str: # Meaning regex
-                pattern = self.fields[field]
-                if re.search(pattern, self.form[field]) == None and self.form[field] != None:
-                    self.__debug(4)
-                    return None
-            else:
-                if type(self.form[field]) != self.fields[field] and self.form[field] != None:
-                    self.__debug(5)
-                    return None
-            
+            elif not self.__typeprocess(field):
+                return None
+
+
             output[field] = self.form[field]
                 
         return output
+
+    def __typeprocess(self, field):
+        form = self.form[field]
+        _type = self.fields[field]
+        
+        if type(_type) == dict:
+            _type = self.fields[field]['type']
+
+        self.__debug([type(form), _type])
+
+        if self.form[field] == None:
+            self.__debug(1)
+            return True
+
+        elif type(_type) == type and type(form) != _type:
+            self.__debug(2)
+            return False
+
+        elif type(_type) == str:
+            if re.search(_type, form) == None:
+                self.__debug(3)
+                return False
+
+        elif type(_type) == list:
+            if type(form) not in _type:
+                self.__debug(4)
+                return False
+
+        return True
 
     def __debug(self, code):
         if self.debug == True:
