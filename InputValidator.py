@@ -84,7 +84,7 @@ class Validator:
             elif not self.__typeprocess(field):
                 return None
 
-            if field in self.form:
+            if field in self.form: # Means that it was a dict
                 output[field] = self.form[field]
                 
         return output
