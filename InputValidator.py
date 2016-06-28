@@ -63,7 +63,7 @@ class Validator:
                         self.__debug(1)
                         return None
 
-                elif (type_ == int or type_ == float) and self.form[field] != None:
+                elif (type_ == int or type_ == float) and field in self.form and self.form[field] != None:
                     if "min" in self.fields[field]:
                         if self.form[field] < self.fields[field]['min']:
                             self.__debug(6)
